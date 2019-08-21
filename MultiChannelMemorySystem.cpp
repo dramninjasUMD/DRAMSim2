@@ -46,9 +46,9 @@ using namespace DRAMSim;
 MultiChannelMemorySystem::MultiChannelMemorySystem(const string &deviceIniFilename_, const string &systemIniFilename_, const string &pwd_, const string &traceFilename_, unsigned megsOfMemory_, string *visFilename_, const IniReader::OverrideMap *paramOverrides)
 	:megsOfMemory(megsOfMemory_), deviceIniFilename(deviceIniFilename_),
 	systemIniFilename(systemIniFilename_), traceFilename(traceFilename_),
-	pwd(pwd_), visFilename(visFilename_), 
-	clockDomainCrosser(new ClockDomain::Callback<MultiChannelMemorySystem, void>(this, &MultiChannelMemorySystem::actual_update)),
-	csvOut(new CSVWriter(visDataOut))
+	pwd(pwd_), visFilename(visFilename_),
+	clockDomainCB(new ClockDomain::Callback<MultiChannelMemorySystem, void>(this, &MultiChannelMemorySystem::actual_update)),
+	clockDomainCrosser(clockDomainCB), csvOut(new CSVWriter(visDataOut))
 {
 	currentClockCycle=0; 
 	if (visFilename)
@@ -350,6 +350,9 @@ void MultiChannelMemorySystem::mkdirIfNotExist(string path)
 
 MultiChannelMemorySystem::~MultiChannelMemorySystem()
 {
+	delete csvOut;
+	delete clockDomainCB;
+
 	for (size_t i=0; i<NUM_CHANS; i++)
 	{
 		delete channels[i];
