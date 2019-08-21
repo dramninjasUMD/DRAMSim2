@@ -25,6 +25,8 @@ namespace ClockDomain
 
         Callback(const Callback<ConsumerT,ReturnT> &e) : object(e.object), member(e.member) {}
 
+        virtual ~Callback() {}
+
         ReturnT operator()()
         {
             return (const_cast<ConsumerT*>(object)->*member)();

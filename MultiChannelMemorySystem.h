@@ -79,6 +79,7 @@ class MultiChannelMemorySystem : public SimulatorObject
 		string traceFilename;
 		string pwd;
 		string *visFilename;
+		ClockDomain::Callback<MultiChannelMemorySystem, void> *clockDomainCB;
 		ClockDomain::ClockDomainCrosser clockDomainCrosser; 
 		static void mkdirIfNotExist(string path);
 		static bool fileExists(string path); 
